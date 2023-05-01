@@ -42,11 +42,11 @@ if(isset($_POST['action'])) {
                 </div>
             </div>
             <div class="">
-                <h1 class="text-center">https://wahltool.schniebs.dev/poll.php?uni=<?=$poll['poll_unique']?></h1>
+                <h1 class="text-center">https://wahltool.kj-dvrs.de/poll.php?uni=<?=$poll['poll_unique']?></h1>
             </div>
             <script type="text/javascript">
             var qrcode = new QRCode(document.getElementById("qrcode"), {
-                text: "https://wahltool.schniebs.dev/poll.php?uni=<?=$poll['poll_unique']?>",
+                text: "https://wahltool.kj-dvrs.de/poll.php?uni=<?=$poll['poll_unique']?>",
                 width: 512,
                 height: 512,
                 colorDark : "#000000",
@@ -249,7 +249,7 @@ require("templates/header.php");
                                         <div><?=$poll['poll_name']?></div>
                                     </td>
                                     <td class="border-0 text-center">
-                                        <div>https://wahltool.schniebs.dev/poll.php?uni=<?=$poll['poll_unique']?></div>
+                                        <div>https://wahltool.kj-dvrs.de/poll.php?uni=<?=$poll['poll_unique']?></div>
                                     </td>
                                     <td class="border-0 actions text-center">
                                         <?php if ($poll['poll_id'] != 0):?>
