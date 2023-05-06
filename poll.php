@@ -92,13 +92,13 @@ if ($poll_user == false) {
         echo("<script>location.href='poll.php?uni=" . $_GET["uni"] . "'</script>");
     }
     ?>
-        <script src="js/refresher.js"></script>
+        <script src="js/refresh.js" defer></script>
         <div class="container py-3">
             <div class="row">
                 <h1 class="display-4 text-start text-kolping-orange col-8"><?=$poll["poll_name"]?></h1>
                 <div class="col-4 d-grid d-md-flex justify-content-end">
                     <div>
-                        <button class="btn btn-kolping my-2" type="button" onclick="window.location.href = '/poll_logout.php';"><i class="bi bi-door-closed-fill"></i></button>
+                        <button class="btn btn-kolping my-2" type="button" onclick="window.location.href = '/poll_logout.php';"><i class="bi bi-door-closed"></i></button>
                     </div>
                 </div>
             </div>

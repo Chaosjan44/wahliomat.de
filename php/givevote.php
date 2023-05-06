@@ -4,7 +4,7 @@ require_once("php/functions.php");
 $poll_user = check_poll_user();
 if ($poll_user == false) {
     print('<h1 class="text-center text-danger display-5">Seite neu laden!</h1>');
-    print('<div style="display: none">unstop</div>');
+    print('<div style="display: none">refresh_now_true</div>');
     exit;
 }
 if (isset($_POST['action'])) {
@@ -42,7 +42,7 @@ if (isset($_POST['action'])) {
             }
             if ($counter > $question['options_amount']) {
                 $error_msg = '<h1 class="text-center text-danger display-5">Du hast zu viel Stimmen abgegeben!</h1>';
-                $stmt = $pdo->prepare("UPDATE polls_users SET error_msg = ? WHERE poll_user_id = ?");
+                $stmt = $pdo->prepare("UPDATE polls_users SET error_msg = ?, refresh = 1 WHERE poll_user_id = ?");
                 $stmt->bindValue(1, $error_msg);
                 $stmt->bindValue(2, $poll_user['poll_user_id']);
                 $result = $stmt->execute();
@@ -80,7 +80,7 @@ if (isset($_POST['action'])) {
             if (!$result) {
                 error('Datenbank Fehler!', pdo_debugStrParams($stmt));
             } 
-            print('<div style="display: none">unstop</div>');
+            print('<div style="display: none">refresh_now_true</div>');
             print("<script>location.href='/poll.php?uni=" . $poll['poll_unique'] . "'</script>");
             exit;
         }

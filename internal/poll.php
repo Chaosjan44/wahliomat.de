@@ -84,8 +84,8 @@ if (isset($_POST['action'])) {
                         </div>
                         <div class="col-4 d-grid gap-2 d-md-flex justify-content-md-end">
                             <input type="number" value="<?=$_POST['poll_id']?>" name="poll_id" style="display: none;" required>
-                            <button type="submit" name="action" value="poll_save" class="btn btn-success"><i class="bi bi-download"></i></button>
-                            <button class="btn btn-danger" type="button" onclick='window.location.href = "poll.php?edit=<?=$pollid?>";'><i class="bi bi-arrow-left"></i></button>
+                            <button type="submit" name="action" value="poll_save" class="btn btn-success"><i class="bi bi-sd-card"></i></button>
+                            <button class="btn btn-danger" type="button" onclick='window.location.href = "poll.php?edit=<?=$pollid?>";'><i class="bi bi-x-circle"></i></button>
                         </div>
                     </form>
                 </div>
@@ -142,8 +142,8 @@ if (isset($_POST['action'])) {
                         </div>
                         <div class="col-4 d-grid gap-2 d-md-flex justify-content-md-end">
                             <input type="number" value="<?=$_POST['poll_id']?>" name="poll_id" style="display: none;" required>
-                            <button type="submit" name="action" value="poll_save_question" class="btn btn-success"><i class="bi bi-plus-square-fill"></i></button>
-                            <button class="btn btn-danger" type="button" onclick='window.location.href = "poll.php?edit=<?=$pollid?>";'><i class="bi bi-arrow-left"></i></button>
+                            <button type="submit" name="action" value="poll_save_question" class="btn btn-success"><i class="bi bi-plus-circle"></i></button>
+                            <button class="btn btn-danger" type="button" onclick='window.location.href = "poll.php?edit=<?=$pollid?>";'><i class="bi bi-x-circle"></i></button>
                         </div>
                     </form>
                 </div>
@@ -204,8 +204,8 @@ if (isset($_POST['action'])) {
                         <div class="col-4 d-grid gap-2 d-md-flex justify-content-md-end">
                             <input type="number" value="<?=$question['question_id']?>" name="question_id" style="display: none;" required>
                             <input type="number" value="<?=$_POST['poll_id']?>" name="poll_id" style="display: none;" required>
-                            <button type="submit" name="action" value="poll_save_question" class="btn btn-success"><i class="bi bi-download"></i></button>
-                            <button class="btn btn-danger" type="button" onclick='window.location.href = "poll.php?edit=<?=$pollid?>";'><i class="bi bi-arrow-left"></i></button>
+                            <button type="submit" name="action" value="poll_save_question" class="btn btn-success"><i class="bi bi-sd-card"></i></button>
+                            <button class="btn btn-danger" type="button" onclick='window.location.href = "poll.php?edit=<?=$pollid?>";'><i class="bi bi-x-circle"></i></button>
                         </div>
                     </form>
                 </div>
@@ -226,14 +226,21 @@ if (isset($_POST['action'])) {
         // set selected question of poll to current
         $stmt = $pdo->prepare("UPDATE questions SET current = 1 WHERE question_id = ?");
         $stmt->bindValue(1, $_POST['question_id']);
-        $result = $stmt->execute();
-        if (!$result) {
+        $result2 = $stmt->execute();
+        if (!$result2) {
             error('Datenbank Fehler!', pdo_debugStrParams($stmt));
         } 
-        $stmt = $pdo->prepare("UPDATE polls_users SET error_msg = '', answered_current = 0, refresh = 1, forcerefresh = 1 WHERE poll_id = ?");
+        // set poll refresh to true
+        $stmt = $pdo->prepare("UPDATE polls SET refresh = 1 WHERE poll_id = ?");
         $stmt->bindValue(1, $_POST['poll_id']);
-        $result = $stmt->execute();
-        if (!$result) {
+        $result3 = $stmt->execute();
+        if (!$result3) {
+            error('Datenbank Fehler!', pdo_debugStrParams($stmt));
+        } 
+        $stmt = $pdo->prepare("UPDATE polls_users SET error_msg = '', answered_current = 0, refresh = 1 WHERE poll_id = ?");
+        $stmt->bindValue(1, $_POST['poll_id']);
+        $result4 = $stmt->execute();
+        if (!$result4) {
             error('Datenbank Fehler!', pdo_debugStrParams($stmt));
         } 
         print("<script>location.href='poll.php?edit=" . $_POST['poll_id'] . "'</script>");
@@ -244,8 +251,14 @@ if (isset($_POST['action'])) {
         // set selected question of poll to current
         $stmt = $pdo->prepare("UPDATE questions SET current = 0 WHERE question_id = ?");
         $stmt->bindValue(1, $_POST['question_id']);
-        $result = $stmt->execute();
-        if (!$result) {
+        $result1 = $stmt->execute();
+        if (!$result1) {
+            error('Datenbank Fehler!', pdo_debugStrParams($stmt));
+        } 
+        $stmt = $pdo->prepare("UPDATE polls SET refresh = 0 WHERE poll_id = ?");
+        $stmt->bindValue(1, $_POST['poll_id']);
+        $result2 = $stmt->execute();
+        if (!$result2) {
             error('Datenbank Fehler!', pdo_debugStrParams($stmt));
         } 
         print("<script>location.href='poll.php?edit=" . $_POST['poll_id'] . "'</script>");
@@ -295,7 +308,7 @@ if (isset($_POST['action'])) {
                 <div class="card cbg2">
                     <div class="card-body cbg2">
                         <div class="">
-                            <h2 class="text-end pe-2">Abgegebene Stimmen: <?=$question['votes_given']?></h2>
+                            <h2 class="text-end pe-2"><?=$question['votes_given']?> Personen haben abgestimmt.</h2>
                             <table class="table align-middle table-borderless table-hover">                        
                                 <thead>
                                     <tr class="cbg2">
@@ -327,7 +340,7 @@ if (isset($_POST['action'])) {
                 </div>
             </div>
             <div class="d-grid gap-2 d-md-flex justify-content-md-center p-3">
-                <button class="btn btn-kolping" type="button" onclick="window.location.href = 'poll.php?edit=<?=$poll_id?>';"><i class="bi bi-arrow-left"></i></button>
+                <button class="btn btn-kolping" type="button" onclick="window.location.href = 'poll.php?edit=<?=$poll_id?>';"><i class="bi bi-x-circle"></i></button>
             </div>
         </div>
         <?php
@@ -377,11 +390,19 @@ if (isset($_POST['action'])) {
     // action to add an option to a question
     } else if ($_POST['action'] == 'poll_question_add_option') { 
         $pollid = $_POST["poll_id"];
+        $stmt = $pdo->prepare("SELECT * FROM questions WHERE question_id = ?");
+        $stmt->bindValue(1, $_POST['question_id']);
+        $stmt->execute();
+        if ($stmt->rowCount() < 1) {
+            error('Datenbank Fehler!', pdo_debugStrParams($stmt));
+        } 
+        $question = $stmt->fetch();
         require("templates/header.php");
         ?>
         <div class="container-xxl py-3">
             <div class="row">
-                <h1 class="display-4 text-center mb-3 text-kolping-orange">Option erstellen</h1>
+                <h1 class="display-4 text-center text-kolping-orange">Option erstellen</h1>
+                <h1 class="text-kolping-orange text-center mb-3  display-5">Frage: <?=$question['question']?></h1>
             </div>
             <div class="">
                 <div class="col mb-3">
@@ -395,8 +416,8 @@ if (isset($_POST['action'])) {
                         <div class="col-4 d-grid gap-2 d-md-flex justify-content-md-end">
                             <input type="number" value="<?=$_POST['question_id']?>" name="question_id" style="display: none;" required>
                             <input type="number" value="<?=$_POST['poll_id']?>" name="poll_id" style="display: none;" required>
-                            <button type="submit" name="action" value="poll_question_save_option" class="btn btn-success"><i class="bi bi-plus-square-fill"></i></button>
-                            <button class="btn btn-danger" type="button" onclick='window.location.href = "poll.php?edit=<?=$pollid?>";'><i class="bi bi-arrow-left"></i></button>
+                            <button type="submit" name="action" value="poll_question_save_option" class="btn btn-success"><i class="bi bi-plus-circle"></i></button>
+                            <button class="btn btn-danger" type="button" onclick='window.location.href = "poll.php?edit=<?=$pollid?>";'><i class="bi bi-x-circle"></i></button>
                         </div>
                     </form>
                 </div>
@@ -428,11 +449,19 @@ if (isset($_POST['action'])) {
         }
         $option = $stmt->fetch();
         $pollid = $_POST["poll_id"];
+        $stmt = $pdo->prepare("SELECT * FROM questions WHERE question_id = ?");
+        $stmt->bindValue(1, $option['question_id']);
+        $stmt->execute();
+        if ($stmt->rowCount() < 1) {
+            error('Datenbank Fehler!', pdo_debugStrParams($stmt));
+        } 
+        $question = $stmt->fetch();
         require("templates/header.php");
         ?>
         <div class="container-xxl py-3">
             <div class="row">
-                <h1 class="display-4 text-center mb-3 text-kolping-orange">Option Bearbeiten</h1>
+                <h1 class="display-4 text-center text-kolping-orange">Option Bearbeiten</h1>
+                <h1 class="text-kolping-orange text-center mb-3 display-5">Frage: <?=$question['question']?></h1>
             </div>
             <div class="">
                 <div class="col mb-3">
@@ -446,8 +475,8 @@ if (isset($_POST['action'])) {
                         <div class="col-4 d-grid gap-2 d-md-flex justify-content-md-end">
                             <input type="number" value="<?=$option['option_id']?>" name="option_id" style="display: none;" required>
                             <input type="number" value="<?=$_POST['poll_id']?>" name="poll_id" style="display: none;" required>
-                            <button type="submit" name="action" value="poll_question_save_option" class="btn btn-success"><i class="bi bi-download"></i></button>
-                            <button class="btn btn-danger" type="button" onclick='window.location.href = "poll.php?edit=<?=$pollid?>";'><i class="bi bi-arrow-left"></i></button>
+                            <button type="submit" name="action" value="poll_question_save_option" class="btn btn-success"><i class="bi bi-sd-card"></i></button>
+                            <button class="btn btn-danger" type="button" onclick='window.location.href = "poll.php?edit=<?=$pollid?>";'><i class="bi bi-x-circle"></i></button>
                         </div>
                     </form>
                 </div>
@@ -496,8 +525,8 @@ if (isset($_POST['action'])) {
                         </div>
                         <div class="col-4 d-grid gap-2 d-md-flex justify-content-md-end">
                             <input type="number" value="<?=$_POST['poll_id']?>" name="poll_id" style="display: none;" required>
-                            <button type="submit" name="action" value="poll_users_save" class="btn btn-success"><i class="bi bi-plus-square-fill"></i></button>
-                            <button class="btn btn-danger" type="button" onclick='window.location.href = "poll.php?edit=<?=$pollid?>";'><i class="bi bi-arrow-left"></i></button>
+                            <button type="submit" name="action" value="poll_users_save" class="btn btn-success"><i class="bi bi-plus-circle"></i></button>
+                            <button class="btn btn-danger" type="button" onclick='window.location.href = "poll.php?edit=<?=$pollid?>";'><i class="bi bi-x-circle"></i></button>
                         </div>
                     </form>
                 </div>
@@ -536,6 +565,26 @@ if (isset($_POST['action'])) {
         print("<script>location.href='poll.php?edit=" . $_POST['poll_id'] . "'</script>");
         exit;
 
+    // action to reset a poll user
+    } else if ($_POST['action'] == 'poll_users_reset') { 
+        $stmt = $pdo->prepare('UPDATE polls_users SET answered_current = 0, refresh = 1 WHERE poll_user_id = ?');
+        $stmt->bindValue(1, $_POST['poll_user_id']);
+        $result1 = $stmt->execute();
+        if (!$result1) {
+            error('Datenbank Fehler #1 zurücksetzen des Users!', pdo_debugStrParams($stmt));
+        }
+        print("<script>location.href='poll.php?edit=" . $_POST['poll_id'] . "'</script>");
+        exit;
+    // Action to log out a user
+    } else if ($_POST['action'] == 'poll_users_logout') { 
+        $stmt = $pdo->prepare('DELETE FROM poll_securitytokens WHERE poll_user_id = ?');
+        $stmt->bindValue(1, $_POST['poll_user_id']);
+        $result = $stmt->execute();
+        if (!$result) {
+            error('Datenbank Fehler #61 beim löschen des Users!', pdo_debugStrParams($stmt));
+        }
+        print("<script>location.href='poll.php?edit=" . $_POST['poll_id'] . "'</script>");
+        exit;
     // action to delete poll user
     } else if ($_POST['action'] == 'poll_users_delete') { 
         $stmt = $pdo->prepare('DELETE FROM poll_securitytokens WHERE poll_user_id = ?');
@@ -583,7 +632,7 @@ if (isset($_POST['action'])) {
                     </div>
                     <div class="col-2">
                         <input type="number" value="<?=$group['group_id']?>" name="group_id" style="display: none;" required>
-                        <button type="submit" name="action" value="create_poll" class="btn btn-success"><i class="bi bi-plus-square-fill"></i></button>
+                        <button type="submit" name="action" value="create_poll" class="btn btn-success"><i class="bi bi-plus-circle"></i></button>
                     </div>
                 </form>
             </div>
@@ -632,9 +681,9 @@ if (isset($_POST['action'])) {
                 <div class="col-4">
                     <form action="poll.php" method="POST" class="d-grid gap-2 d-md-flex justify-content-md-end">
                         <input type="number" value="<?=$poll['poll_id']?>" name="poll_id" style="display: none;" required>
-                        <button class="btn btn-kolping" type="submit" name="action" value="poll_edit"><i class="bi bi-pencil-fill"></i></button>
-                        <button class="btn btn-kolping" type="submit" name="action" value="poll_add_question"><i class="bi bi-plus-square-fill"></i></button>
-                        <button class="btn btn-danger" type="button" onclick="window.location.href = 'group.php';"><i class="bi bi-arrow-left"></i></button>
+                        <button class="btn btn-kolping" type="submit" name="action" value="poll_edit"><i class="bi bi-pencil"></i></button>
+                        <button class="btn btn-success" type="submit" name="action" value="poll_add_question"><i class="bi bi-plus-circle"></i></button>
+                        <button class="btn btn-danger" type="button" onclick="window.location.href = 'group.php';"><i class="bi bi-x-circle"></i></button>
                     </form>
                 </div>
                 
@@ -707,22 +756,24 @@ if (isset($_POST['action'])) {
                                                         <div class="">
                                                             <input type="number" value="<?=$option['option_id']?>" name="option_id" style="display: none;" required>
                                                             <input type="number" value="<?=$poll['poll_id']?>" name="poll_id" style="display: none;" required>
-                                                            <button type="submit" name="action" value="poll_question_edit_option" class="btn btn-kolping"><i class="bi bi-pencil-fill"></i></button>
+                                                            <button type="submit" name="action" value="poll_question_edit_option" class="btn btn-kolping"><i class="bi bi-pencil"></i></button>
                                                         </div>
                                                         <div class="">
                                                             <input type="number" value="<?=$option['option_id']?>" name="option_id" style="display: none;" required>
-                                                            <button class="btn btn-danger" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas<?=$option['option_id']?>" aria-controls="offcanvas<?=$option['option_id']?>"><i class="bi bi-trash-fill"></i></button>
+                                                            <button class="btn btn-danger" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas<?=$option['option_id']?>" aria-controls="offcanvas<?=$option['option_id']?>"><i class="bi bi-trash"></i></button>
                                                             <div class="offcanvas offcanvas-end cbg" data-bs-scroll="true" tabindex="-1" id="offcanvas<?=$option['option_id']?>" aria-labelledby="offcanvas<?=$option['option_id']?>Label">
                                                                 <div class="offcanvas-header">
                                                                     <h2 class="offcanvas-title ctext" id="offcanvas<?=$option['option_id']?>Label">Wirklich Löschen?</h2>
                                                                     <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                                                                 </div>
                                                                 <div class="offcanvas-body">
-                                                                    <span class="pb-3">Bist du dir sicher das du diese Wahl löschen möchtest?<br></span>
-                                                                    <input type="number" value="<?=$option['option_id']?>" name="option_id" style="display: none;" required>
-                                                                    <input type="number" value="<?=$poll['poll_id']?>" name="poll_id" style="display: none;" required>
-                                                                    <button class="btn btn-success mx-2" type="submit" name="action" value="poll_question_delete_option">Ja</button>
-                                                                    <button class="btn btn-danger mx-2" type="button" data-bs-dismiss="offcanvas" aria-label="Close">Nein</button>
+                                                                    <span class="pb-3 text-center">Bist du dir sicher das du diese Option löschen möchtest?<br></span>
+                                                                    <div class="my-3 d-grid gap-2 d-md-flex justify-content-md-center">
+                                                                        <input type="number" value="<?=$option['option_id']?>" name="option_id" style="display: none;" required>
+                                                                        <input type="number" value="<?=$poll['poll_id']?>" name="poll_id" style="display: none;" required>
+                                                                        <button class="btn btn-success" type="submit" name="action" value="poll_question_delete_option">Ja</button>
+                                                                        <button class="btn btn-danger" type="button" data-bs-dismiss="offcanvas" aria-label="Close">Nein</button>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -738,8 +789,8 @@ if (isset($_POST['action'])) {
                                 <input type="number" value="<?=$poll['poll_id']?>" name="poll_id" style="display: none;" required>
                                 <input type="number" value="<?=$question['question_id']?>" name="question_id" style="display: none;" required>
                                 <button class="btn btn-kolping" type="submit" name="action" value="poll_question_show_result"><i class="bi bi-bar-chart-line-fill"></i></button>
-                                <button class="btn btn-kolping" type="submit" name="action" value="poll_question_add_option"><i class="bi bi-plus-square-fill"></i></button>
-                                <button class="btn btn-kolping" type="submit" name="action" value="poll_edit_question"><i class="bi bi-pencil-fill"></i></button>
+                                <button class="btn btn-success" type="submit" name="action" value="poll_question_add_option"><i class="bi bi-plus-circle"></i></button>
+                                <button class="btn btn-kolping" type="submit" name="action" value="poll_edit_question"><i class="bi bi-pencil"></i></button>
                                 <div>
                                     <input type="number" value="<?=$question['question_id']?>" name="question_id" style="display: none;" required>
                                     <button class="btn btn-danger" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas<?=$question['question_id']?>l" aria-controls="offcanvas<?=$question['question_id']?>l">Ergebnisse zurücksetzten</button>
@@ -761,7 +812,7 @@ if (isset($_POST['action'])) {
                                 </div>
                                 <div class="">
                                     <input type="number" value="<?=$question['question_id']?>" name="question_id" style="display: none;" required>
-                                    <button class="btn btn-danger" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas<?=$question['question_id']?>" aria-controls="offcanvas<?=$question['question_id']?>"><i class="bi bi-trash-fill"></i></button>
+                                    <button class="btn btn-danger" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas<?=$question['question_id']?>" aria-controls="offcanvas<?=$question['question_id']?>"><i class="bi bi-trash"></i></button>
                                     <div class="offcanvas offcanvas-end cbg" data-bs-scroll="true" tabindex="-1" id="offcanvas<?=$question['question_id']?>" aria-labelledby="offcanvas<?=$question['question_id']?>Label">
                                         <div class="offcanvas-header">
                                             <h2 class="offcanvas-title ctext" id="offcanvas<?=$question['question_id']?>Label">Wirklich Löschen?</h2>
@@ -794,19 +845,19 @@ if (isset($_POST['action'])) {
                             <form action="poll.php" method="POST" class="d-grid gap-2 d-md-flex justify-content-md-end">
                                 <div>
                                     <input type="number" value="<?=$poll['poll_id']?>" name="poll_id" style="display: none;" required>
-                                    <button class="btn btn-success" type="submit" name="action" value="poll_users_create"><i class="bi bi-plus-square-fill"></i></button>
+                                    <button class="btn btn-success" type="submit" name="action" value="poll_users_create"><i class="bi bi-plus-circle"></i></button>
                                 </div>
                                 <?php if ($error_msg3 == ""): ?>
                                 <div class="">
                                     <input type="number" value="<?=$poll['poll_id']?>" name="poll_id" style="display: none;" required>
-                                    <button class="btn btn-danger" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas<?=$poll['poll_id']?>1" aria-controls="offcanvas<?=$poll['poll_id']?>1"><i class="bi bi-trash-fill"></i></button>
+                                    <button class="btn btn-danger" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas<?=$poll['poll_id']?>1" aria-controls="offcanvas<?=$poll['poll_id']?>1"><i class="bi bi-person-dash"></i></button>
                                     <div class="offcanvas offcanvas-end cbg" data-bs-scroll="true" tabindex="-1" id="offcanvas<?=$poll['poll_id']?>1" aria-labelledby="offcanvas<?=$poll['poll_id']?>1Label">
                                         <div class="offcanvas-header">
                                             <h2 class="offcanvas-title ctext" id="offcanvas<?=$poll['poll_id']?>1Label">Wirklich Löschen?</h2>
                                             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                                         </div>
                                         <div class="offcanvas-body">
-                                            <span class="pb-3">Bist du dir sicher das du alle Nutzer*innen löschen möchtest?<br></span>
+                                            <span class="pb-3 text-center">Bist du dir sicher das du alle Nutzer*innen löschen möchtest?<br></span>
                                             <div class="my-3 d-grid gap-2 d-md-flex justify-content-md-center">
                                                 <input type="number" value="<?=$poll['poll_id']?>" name="poll_id" style="display: none;" required>
                                                 <button class="btn btn-success" type="submit" name="action" value="poll_users_deleteall">Ja</button>
@@ -875,7 +926,9 @@ if (isset($_POST['action'])) {
                                                 <form action="poll.php" method="post" class="d-grid gap-2 d-md-flex justify-content-md-end">
                                                     <div class="">
                                                         <input type="number" value="<?=$polls_user['poll_user_id']?>" name="poll_user_id" style="display: none;" required>
-                                                        <button class="btn btn-danger" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas<?=$polls_user['poll_user_id']?>" aria-controls="offcanvas<?=$polls_user['poll_user_id']?>"><i class="bi bi-trash-fill"></i></button>
+                                                        <button class="btn btn-kolping me-1" type="submit" name="action" value="poll_users_reset"><i class="bi bi-arrow-clockwise"></i></button>
+                                                        <button class="btn btn-kolping" type="submit" name="action" value="poll_users_logout"><i class="bi bi-door-closed"></i></button>
+                                                        <button class="btn btn-danger ms-1" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas<?=$polls_user['poll_user_id']?>" aria-controls="offcanvas<?=$polls_user['poll_user_id']?>"><i class="bi bi-person-dash"></i></button>
                                                         <div class="offcanvas offcanvas-end cbg" data-bs-scroll="true" tabindex="-1" id="offcanvas<?=$polls_user['poll_user_id']?>" aria-labelledby="offcanvas<?=$polls_user['poll_user_id']?>Label">
                                                             <div class="offcanvas-header">
                                                                 <h2 class="offcanvas-title ctext" id="offcanvas<?=$polls_user['poll_user_id']?>Label">Wirklich Löschen?</h2>

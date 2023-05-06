@@ -44,6 +44,7 @@ CREATE TABLE `polls` (
   `poll_id` int(10) NOT NULL AUTO_INCREMENT,
   `group_id` int(10) NOT NULL,
   `poll_unique` varchar(255),
+  `refresh` tinyint(1) NOT NULL DEFAULT 0,
   `poll_name` varchar(255) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`poll_id`),
