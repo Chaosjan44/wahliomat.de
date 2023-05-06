@@ -13,10 +13,6 @@ button {
     color: #2d3238 !important;
 }
 
-i {
-    color: #2d3238 !important;
-}
-
 .navbar-icon_light {
     display: none;
     height: 10vh;
@@ -41,6 +37,10 @@ i {
 
 .ctext {
     color: #ffffff !important;
+}
+
+.atext {
+    color: #2d3238 !important;
 }
 
 .clink {

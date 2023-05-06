@@ -98,7 +98,7 @@ if ($poll_user == false) {
                 <h1 class="display-4 text-start text-kolping-orange col-8"><?=$poll["poll_name"]?></h1>
                 <div class="col-4 d-grid d-md-flex justify-content-end">
                     <div>
-                        <button class="btn btn-kolping my-2" type="button" onclick="window.location.href = '/poll_logout.php';"><i class="bi bi-door-closed"></i></button>
+                        <button class="btn btn-kolping my-2" type="button" onclick="window.location.href = '/poll_logout.php';"><i class="bi atext bi-door-closed"></i></button>
                     </div>
                 </div>
             </div>
