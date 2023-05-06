@@ -13,6 +13,10 @@ button {
     color: #ffffff !important;
 }
 
+i {
+    color: #ffffff !important;
+}
+
 .navbar-icon_light {
     display: inline-block;
     height: 10vh;

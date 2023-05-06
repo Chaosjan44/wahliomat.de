@@ -340,7 +340,7 @@ if (isset($_POST['action'])) {
                 </div>
             </div>
             <div class="d-grid gap-2 d-md-flex justify-content-md-center p-3">
-                <button class="btn btn-kolping" type="button" onclick="window.location.href = 'poll.php?edit=<?=$poll_id?>';"><i class="bi bi-x-circle"></i></button>
+                <button class="btn btn-danger" type="button" onclick="window.location.href = 'poll.php?edit=<?=$poll_id?>';"><i class="bi bi-x-circle"></i></button>
             </div>
         </div>
         <?php
@@ -681,7 +681,7 @@ if (isset($_POST['action'])) {
                 <div class="col-4">
                     <form action="poll.php" method="POST" class="d-grid gap-2 d-md-flex justify-content-md-end">
                         <input type="number" value="<?=$poll['poll_id']?>" name="poll_id" style="display: none;" required>
-                        <button class="btn btn-kolping" type="submit" name="action" value="poll_edit"><i class="bi bi-pencil"></i></button>
+                        <button class="btn btn-kolping" type="submit" name="action" value="poll_edit"><i class="bi ctext2 bi-pencil"></i></button>
                         <button class="btn btn-success" type="submit" name="action" value="poll_add_question"><i class="bi bi-plus-circle"></i></button>
                         <button class="btn btn-danger" type="button" onclick="window.location.href = 'group.php';"><i class="bi bi-x-circle"></i></button>
                     </form>
