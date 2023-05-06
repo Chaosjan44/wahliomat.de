@@ -7,6 +7,14 @@ if ($poll_user == false) {
     print('<div style="display: none">refresh_now_true</div>');
     exit;
 }
+$stmt = $pdo->prepare('SELECT poll_unique FROM polls where poll_id  = ?');
+$stmt->bindValue(1, $poll_user["poll_id"], PDO::PARAM_INT);
+$stmt->execute();
+if ($stmt->rowCount() < 1) {
+    error('Fehler beim Abgeben der Ergebnisse');
+}
+$poll1 = $stmt->fetch();
+$poll_unique = $poll1['poll_unique'];
 if (isset($_POST['action'])) {
     if ($_POST['action'] == 'submit') {
         $stmt = $pdo->prepare('SELECT * FROM polls where poll_id  = ?');
@@ -86,5 +94,5 @@ if (isset($_POST['action'])) {
         }
     }
 }
-
+print("<script>location.href='/poll.php?uni=" . $poll['poll_unique'] . "'</script>");
 ?>
