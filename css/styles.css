@@ -37,11 +37,11 @@ html {
 }
 
 .body {
-    min-height: 75.6vh;
+    min-height: 76vh;
 }
 
 .body_mobile {
-    min-height: 71vh;
+    min-height: 80vh;
 }
 
 
