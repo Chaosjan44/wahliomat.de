@@ -35,7 +35,7 @@ $crdate = "2023";
             </div>
         </div>
         <div class="row align-items-center">
-            <div class="col-4 text-start"><a href="https://github.com/chaosjan44/wahltool.kj-dvrs.de" target="#"><i class="bi ctext text-size-x-large bi-github"></i></a></div>
+            <div class="col-4 text-start"><a href="https://github.com/chaosjan44/wahliomat.de" target="#"><i class="bi ctext text-size-x-large bi-github"></i></a></div>
             <div class="col-4 text-center ctext light"><a href="/internal.php" class="text-center ctext light">&copy; <?=$crdate?> Jan Schniebs</a></div>
             <div class="col-4 d-flex justify-content-end">
                 <input onchange="toggleStyle()" class="styleswitcher" type="checkbox" name="switch" id="style_switch" <?php if (check_style() == "dark"): print("checked"); endif; ?> >
@@ -72,7 +72,7 @@ $crdate = "2023";
                     </ul>
                 </div>
                 <div class="row justify-content-between align-items-center">
-                    <div class="col-3 text-start px-0"><a href="https://github.com/chaosjan44/wahltool.kj-dvrs.de" target="#"><i class="bi ctext text-size-x-large bi-github"></i></a></div>
+                    <div class="col-3 text-start px-0"><a href="https://github.com/chaosjan44/wahliomat.de" target="#"><i class="bi ctext text-size-x-large bi-github"></i></a></div>
                     <div class="col-6 ctext text-center light px-0"><a href="/internal.php" class="ctext light">&copy; <?=$crdate?> Jan Schniebs</a></div>
                     <div class="col-3 d-flex justify-content-end px-0">
                         <input onchange="toggleStyle()" class="styleswitcher" type="checkbox" name="switch" id="style_switch" <?php if (check_style() == "dark"): print("checked"); endif; ?> >
