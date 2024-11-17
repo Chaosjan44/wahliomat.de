@@ -20,7 +20,7 @@ var geturl = "/php/check.php?uni=" + uni;
 function check() {
     const xhttp = new XMLHttpRequest();
     xhttp.open("GET", geturl);
-    //xhttp.send();
+    xhttp.send();
     xhttp.onload = function() {
         if (this.responseText.includes('refresh_true')) {
             loadContent();
